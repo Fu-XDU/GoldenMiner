@@ -19,8 +19,8 @@ public class R : MonoBehaviour
 
     private Vector3 dest;
 
-    private float Length = 156;
-    private float LSpeed = 300;
+    // private float Length = 156;
+    // private float LSpeed = 300;
     // Start is called before the first frame update
     void Start()
     {
@@ -75,13 +75,14 @@ public class R : MonoBehaviour
             {
                 status = 0;
             }
-        } 
+        }
     }
     
     void OnCollisionEnter(Collision collision) {
         // 销毁当前游戏物体
         Debug.Log("钩子抓到金块");
         status = 2;
+        GameObject.Find("大金块-金块-000").SendMessage("collect",angle2);
         this.gameObject.SetActive(false);
         //Destroy(this.gameObject);
     }
