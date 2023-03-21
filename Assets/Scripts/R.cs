@@ -9,7 +9,7 @@ public class R : MonoBehaviour
     float angle2 = 0;
     private bool rotation_direction = true;
     Vector3 point = new Vector3(420, 367, -1);
-    public float Speed = 0.01F;
+    public float Speed = 1;
 
     private Vector3 startedPoint;
 
@@ -43,7 +43,7 @@ public class R : MonoBehaviour
             }
             transform.RotateAround(point, rotation_direction?Vector3.forward:Vector3.back, angle_step);
             angle += angle_step;
-            angle2 += angle_step*(rotation_direction?1F:-1F);
+            // angle2 += angle_step*(rotation_direction?1F:-1F);
             if (Input.GetKeyDown (KeyCode.Space)) {
                 status = 1;
                 startedPoint = transform.localPosition;
@@ -53,24 +53,23 @@ public class R : MonoBehaviour
         {
             if (needCalDest)
             {
-                dest = new Vector3(420+352*(angle2==0?0:Mathf.Tan(angle2*Mathf.Deg2Rad)),0, -1);    
+                angle2 = GetInpectorEulers(transform).z;
+                dest = new Vector3(419.9F+352.8F*(angle2==0?0:Mathf.Tan(angle2*Mathf.Deg2Rad)),0, -1);
             }
             
             needCalDest = false;
-            transform.localPosition = Vector3.MoveTowards(transform.localPosition, dest, Speed);
+            transform.localPosition = Vector3.MoveTowards(transform.localPosition, dest, Speed * Time.deltaTime);
 
-            // Length += Time.deltaTime * LSpeed;
-            // transform.localScale = new Vector3(transform.localScale.x, Length, transform.localScale.z); 
             if (transform.localPosition == dest || transform.localPosition.x < 0 || transform.localPosition.x > 900 ||
                 transform.localPosition.y < 0 || transform.localPosition.y > 500)
             {
                 status = 2;
-                needCalDest = true;
             }
         }
         else if (status == 2)
         {
-            transform.localPosition = Vector3.MoveTowards(transform.localPosition, startedPoint, Speed);
+            needCalDest = true;
+            transform.localPosition = Vector3.MoveTowards(transform.localPosition, startedPoint, Speed* Time.deltaTime);
             if (transform.localPosition == startedPoint)
             {
                 status = 0;
@@ -80,10 +79,53 @@ public class R : MonoBehaviour
     
     void OnCollisionEnter(Collision collision) {
         // 销毁当前游戏物体
-        Debug.Log("钩子抓到金块");
+        // Debug.Log("钩子抓到金块");
         status = 2;
         GameObject.Find("大金块-金块-000").SendMessage("collect",angle2);
-        this.gameObject.SetActive(false);
-        //Destroy(this.gameObject);
     }
+    
+    private Vector3 GetInpectorEulers(Transform mTransform)
+    {
+        Vector3 angle = mTransform.eulerAngles;
+        float x = angle.x;
+        float y = angle.y;
+        float z = angle.z;
+ 
+        if (Vector3.Dot(mTransform.up, Vector3.up) >= 0f)
+        {
+            if (angle.x >= 0f && angle.x <= 90f)
+            {
+                x = angle.x;
+            }
+            if (angle.x >= 270f && angle.x <= 360f)
+            {
+                x = angle.x - 360f;
+            }
+        }
+        if (Vector3.Dot(mTransform.up, Vector3.up) < 0f)
+        {
+            if (angle.x >= 0f && angle.x <= 90f)
+            {
+                x = 180 - angle.x;
+            }
+            if (angle.x >= 270f && angle.x <= 360f)
+            {
+                x = 180 - angle.x;
+            }
+        }
+ 
+        if (angle.y > 180)
+        {
+            y = angle.y - 360f;
+        }
+ 
+        if (angle.z > 180)
+        {
+            z = angle.z - 360f;
+        }
+        Vector3 vector3 = new Vector3(Mathf.Round(x), Mathf.Round(y), Mathf.Round(z));
+        return vector3;
+    }
+
+
 }
