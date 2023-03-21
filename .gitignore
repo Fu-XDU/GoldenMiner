@@ -18,8 +18,7 @@ node_modules/
 logs/
 
 # Unity
-Library
-library
+library/
 Temp
 temp
 Obj
