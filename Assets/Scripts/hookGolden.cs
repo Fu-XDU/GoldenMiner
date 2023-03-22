@@ -1,7 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-
+using UnityEngine.UI;
 public class hookGolden : MonoBehaviour
 {
     private bool collecting = false;
@@ -28,10 +28,16 @@ public class hookGolden : MonoBehaviour
                 Destroy(this.gameObject);
                 hook.SetActive(true);
                 collecting = false;
+				AddBalance(500);
             }
         }
     }
     
+	void AddBalance(int count) {
+		int balance = int.Parse(GameObject.Find("Canvas/balance").GetComponent<Text>().text);
+		GameObject.Find("Canvas/balance").GetComponent<Text>().text = string.Format("{0}", balance+count);
+	}
+
     void collect()
     {
         collecting = true;

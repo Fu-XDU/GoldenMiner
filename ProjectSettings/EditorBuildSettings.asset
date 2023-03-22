@@ -11,4 +11,13 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/Scenes/Game.unity
     guid: 5d8c6775e411f45e2a2e6bb6d7f186be
+  - enabled: 1
+    path: Assets/Scenes/Failed.unity
+    guid: 8c88e71396dc14fddb7182395dda0ef1
+  - enabled: 1
+    path: Assets/Scenes/LevelGoal.unity
+    guid: d5c964a678d694686ae7ec26e623e810
+  - enabled: 1
+    path: Assets/Scenes/Succeed.unity
+    guid: ce91f2a8d12d9405b8bdfdeace8fc386
   m_configObjects: {}
